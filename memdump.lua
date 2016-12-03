@@ -74,8 +74,9 @@ function snapshot( mark,var,desc )
     end
 end
 
+-- initlize and make first memory snapshot
 function Memdump:initlize()
-    self.mem_snapshot = 
+    self.mem_snapshot =
     {
         ref = {},
         obj = {},
@@ -94,7 +95,7 @@ end
 function Memdump:diff( file )
     assert( self.mem_snapshot ,"please call initlize ..." )
 
-    local mem_snapshot = 
+    local mem_snapshot =
     {
         ref = {},
         obj = {},
@@ -106,6 +107,8 @@ function Memdump:diff( file )
     -- don't iterate self
     mem_snapshot.obj[self] = true
 
+    -- make twice gc,make sure weak reference object being gc
+    collectgarbage( "collect" )
     collectgarbage( "collect" )
     snapshot( mem_snapshot,debug.getregistry(),"[registry]" )
 
@@ -127,7 +130,7 @@ end
 function Memdump:dump( file )
     assert( self.mem_snapshot ,"please call initlize ..." )
 
-    local mem_snapshot = 
+    local mem_snapshot =
     {
         ref = {},
         obj = {},
@@ -139,6 +142,8 @@ function Memdump:dump( file )
     -- don't iterate self
     mem_snapshot.obj[self] = true
 
+    -- make twice gc,make sure weak reference object being gc
+    collectgarbage( "collect" )
     collectgarbage( "collect" )
     snapshot( mem_snapshot,debug.getregistry(),"[registry]" )
 
