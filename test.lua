@@ -24,15 +24,19 @@ foo_f = factory( { 1,2,3 } )
 local co_upvalue = { 1,2,3 }
 co = coroutine.create( function()
         for k,v in pairs( co_upvalue ) do
-            print( k,v )
+            co_upvalue[k] = v + 1
+            coroutine.yield()
         end
     end
     )
 
--- Is there a way to get thread's upvalue ? Nethier debug.getlocal nor
--- debug.getupvalue can do that.so far,can't get infomation about co_upvalue.
+-- we can't get info of a coroutine in dead status or never resume
+coroutine.resume( co )
 
 md:diff()
+
+-- md:initlize()
 -- md:dump()
 
--- upvalue不被引用时并不会成为upvalue --http://lua-users.org/lists/lua-l/2007-07/msg00451.html
+-- upvalue不被引用时并不会成为upvalue 
+-- http://lua-users.org/lists/lua-l/2007-07/msg00451.html
