@@ -95,8 +95,9 @@ function Memdump.snapshot( mark,var,desc )
     end
 end
 
+-- initlize and make first memory snapshot
 function Memdump:initlize()
-    self.mem_snapshot = 
+    self.mem_snapshot =
     {
         ref = {},
         obj = {},
@@ -128,6 +129,7 @@ end
 function Memdump:diff( file )
     assert( self.mem_snapshot ,"please call initlize ..." )
 
+    -- make twice gc,make sure weak reference object being gc
     collectgarbage( "collect" )
     collectgarbage( "collect" )
     Memdump.snapshot( self.new_mem_snapshot,debug.getregistry(),"[registry]" )
